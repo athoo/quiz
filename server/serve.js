@@ -1,5 +1,13 @@
 var express = require('express')
 var app = express()
+
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 // var Excel = require('exceljs')
 //
 // respond with "hello world" when a GET request is made to the homepage

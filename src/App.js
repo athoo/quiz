@@ -27,6 +27,10 @@ class App extends Component {
             })
     }
 
+    handleSubmit(e) {
+        console.log(this.state.value);
+    }
+
     render() {
     return (
       <div className="App">
@@ -40,10 +44,10 @@ class App extends Component {
                       value={this.state.value}
                       placeholder="Enter number"
                       onChange={this.handleChange}
-                  />
+                    />
                   <FormControl.Feedback />
               </FormGroup>
-              <Button bsStyle="primary" type="submit" className="Start">Start</Button>
+                <input bsStyle="primary" value="Start" type="submit">
             </form>
         </header>
       </div>

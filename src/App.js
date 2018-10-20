@@ -2,23 +2,27 @@ import React, { Component } from 'react';
 import './App.css';
 import {FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import axios from 'axios';
-
-class Question extends Component {
-    render() {
-        return (
-            <div>
-                This is a new conponent
-            </div>
-        )
-    }
-}
-
+//
+// class Question extends Component {
+//     render() {
+//         return (
+//             <div><h1>{this.state}</h1>
+//             <div>
+//                 This is a new conponent
+//             </div>
+//             </div>
+//         )
+//     }
+// }
 
 class App extends Component {
 
     constructor(props){
         super(props);
-        this.state = {value: ''};
+        this.state = {
+            value: '',
+            quizzes: {},
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -33,8 +37,13 @@ class App extends Component {
         console.log(this.state.value);
         axios.get(`http://localhost:5000/getQuestions/${this.state.value}`)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 console.log(res.data.task1.system);
+                const quizzes = res.data;
+                this.setState(state => ({
+                    quizzes: quizzes
+                }))
+                console.log(this.state.quizzes);
             })
     }
 
@@ -63,5 +72,11 @@ class App extends Component {
         );
     }
 }
+
+// function WelcomePage(props){
+//     return (
+//
+//     );
+// }
 
 export default App;

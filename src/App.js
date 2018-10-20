@@ -23,7 +23,7 @@ class App extends Component {
         axios.get(`http://localhost:5000/getQuestions/${this.state.value}`)
             .then(res => {
                 console.log(res);
-                console.log(res.data);
+                console.log(res.data.task1.system);
             })
     }
 

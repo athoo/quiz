@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import axios from 'axios';
-//
+
 // class Question extends Component {
 //     render() {
 //         return (
@@ -15,6 +15,29 @@ import axios from 'axios';
 //     }
 // }
 
+// let userId;
+
+function WelcomePage(props){
+    return (
+        <header className="App-header">
+            <h1>Welcome to NOAH study</h1>
+            <form onSubmit={props.handleSubmit}>
+                <FormGroup>
+                    <ControlLabel>Please select your Participant number:</ControlLabel>
+                    <FormControl
+                        type="text"
+                        value={props.value}
+                        placeholder="Enter number"
+                        onChange={props.handleChange}
+                    />
+                </FormGroup>
+                <Button bsStyle="primary" type="submit" className="Start">Start</Button>
+            </form>
+        </header>
+    );
+}
+
+
 class App extends Component {
 
     constructor(props){
@@ -22,6 +45,7 @@ class App extends Component {
         this.state = {
             value: '',
             quizzes: {},
+            isLoggedIn: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,11 +55,12 @@ class App extends Component {
         this.setState({value:e.target.value});
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit(user) {
+        // e.preventDefault();
         console.log("run submit function");
-        console.log(this.state.value);
-        axios.get(`http://localhost:5000/getQuestions/${this.state.value}`)
+        // console.log(e.props.value);
+        console.log(this);
+        axios.get(`http://localhost:5000/getQuestions/${user}`)
             .then(res => {
                 // console.log(res);
                 console.log(res.data.task1.system);
@@ -48,35 +73,28 @@ class App extends Component {
     }
 
 
-
     render() {
+
+        const isloggedIn = this.state.isLoggedIn;
+        let content;
+
+        if (isloggedIn){
+
+        }else{
+            content = <WelcomePage
+                handleSubmit={(this.value) => this.handleSubmit}
+                value={this.value}
+            />
+        }
+
         return (
             <div className="App">
-                <header className="App-header">
-                    <h1>Welcome to NOAH study</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                            <ControlLabel>Please select your Participant number:</ControlLabel>
-                            <FormControl
-                                type="text"
-                                value={this.state.value}
-                                placeholder="Enter number"
-                                onChange={this.handleChange}
-                            />
-                            <FormControl.Feedback />
-                        </FormGroup>
-                        <Button bsStyle="primary" type="submit" className="Start">Start</Button>
-                    </form>
-                </header>
+                {content}
             </div>
         );
     }
 }
 
-// function WelcomePage(props){
-//     return (
-//
-//     );
-// }
+
 
 export default App;

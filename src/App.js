@@ -5,7 +5,7 @@ import axios from 'axios';
 const demo = {
     user:"1",
     system:"NOAH",
-    Tasks:["This is the first question", "This is the second question", "This is the third one."]
+    Tasks:["This is the first question: find the most expensive listing in New York.", "This is the second question", "This is the third one."]
 }
 let stage = true;
 class App extends Component {
@@ -15,7 +15,7 @@ class App extends Component {
        this.state = {
            value:"",
            response:"",
-           userId:"Fill a number",
+           userId:"",
            currentTask:0
        }
        this.fillUser = this.fillUser.bind(this);
@@ -73,10 +73,6 @@ class App extends Component {
                     {main}
                 </Background>
             </div>
-            // <div>
-            //     <input type="text" value={this.state.value} onChange={this.handleChange}/>
-            //     <label>{this.state.value}</label>
-            // </div>
         )
     }
 }
@@ -91,7 +87,7 @@ function Welcome(props){
                         type="text"
                         value={props.userId}
                         onChange={props.fillUser}
-                        // placeholder={"Enter Number"}
+                        placeholder={"Enter a Number"}
                     />
                 </FormGroup>
                 <Button bsStyle="primary" type="submit" className="Start">Start</Button>

@@ -8,6 +8,7 @@ const demo = {
     Tasks:["This is the first question: find the most expensive listing in New York.", "This is the second question", "This is the third one."]
 }
 let stage = true;
+const serverIP = "http://localhost:5000"
 class App extends Component {
 
     constructor(props) {
@@ -16,7 +17,18 @@ class App extends Component {
            value:"",
            response:"",
            userId:"",
-           currentTask:0
+           currentTask:0,
+           warmUpQuestions:[],
+           warmUpLeft:0,
+           task1:[],
+           task1Left:0,
+           system1:"",
+           task2:[],
+           task2Left:0,
+           system2:"",
+           numberOfTasks:0,
+           tasks:[],
+           responses:[],
        }
        this.fillUser = this.fillUser.bind(this);
        this.handleUser = this.handleUser.bind(this);
@@ -32,37 +44,112 @@ class App extends Component {
         // alert("welcome");
         e.preventDefault();
 
-        this.setState((state, props)=>({
-            currentTask: state.currentTask + 1
-        }))
+        let user = this.state.userId;
+        axios.get(serverIP+`/getQuestions/${user}`)
+            .then(res => {
+                console.log(res.data);
+
+                let resData = res.data;
+                let tasks = [];
+
+                resData.warmUp.map((q)=>{
+                    tasks.push(["Warm Up Session", q])
+                })
+                resData.task1.dataset.map((q)=>{
+                    tasks.push([resData.task1.system, q])
+                })
+                resData.task2.dataset.map((q)=>{
+                    tasks.push([resData.task2.system, q])
+                })
+
+                console.log(tasks);
+
+                this.state.tasks = tasks;
+                this.state.numberOfTasks = tasks.length;
+
+
+                // this.state.warmUpQuestions = res.data.warmUp;
+                // this.state.warmUpLeft = res.data.warmUp.length;
+                // this.state.system1 = res.data.task1.system;
+                // this.state.task1 = res.data.task1.dataset;
+                // this.state.task1Left = res.data.task1.length;
+                // this.state.system2 =res.data.task2.system;
+                // this.state.task2 = res.data.task2.dataset;
+                // this.state.task2Left = res.data.task2.length;
+
+                this.setState((state, props)=>({
+                    currentTask: state.currentTask + 1
+                }))
+            })
+
+
     }
     handleAnswer(e){
         console.log(e.target.value);
 
         this.setState({response: e.target.value});
+
+
     }
     submitAnswer(e){
         e.preventDefault();
 
-        alert("Answersubmitted");
+        let res = this.state.response;
+        let seconds = new Date().getTime()/1000;
+        let n = this.state.currentTask;
+
+
+
+        let responses = this.state.responses;
+        let tasks = this.state.tasks;
+        responses.push(tasks[n-1].concat([res, seconds]));
+
+
+        // alert("Answersubmitted");
         this.setState((state, props)=>({
-            currentTask: state.currentTask + 1
+            currentTask: n + 1,
+            response: "",
+            responses: responses,
+            // responses: state.responses.push(state.tasks[n].concat([res, seconds])),
         }))
     }
 
     render(){
         const userId = this.state.userId;
         const currentTask = this.state.currentTask;
-        const Tasks = demo.Tasks;
+        const Tasks = this.state.tasks;
+
+
         const answer = this.state.response;
         console.log("this is user ID"+userId);
         let main;
         if(currentTask==0){
             main=<Welcome userId={userId} fillUser={this.fillUser} handleUser={this.handleUser}/>;
         }else if(currentTask>Tasks.length){
-            main=<div>END</div>;
+            main=<div>Thank you for your participation! <a href="http://garyperlman.com/quest/quest.cgi">Survey</a></div>;
+
+            const responses = this.state.responses;
+
+            let config = {
+                headers: {
+                    "Content-Type":"application/json"
+                }
+            }
+            axios.post(serverIP+'/postData', {
+                user:userId,
+                responses:responses
+            }, config)
+                .then(function(response){
+                    console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+
+            // console.log(this.state.responses);
         }else{
-            main=<Question number={currentTask} title={Tasks[currentTask-1]} answer={answer} handleAnswer={this.handleAnswer} submitAnswer={this.submitAnswer}/>;
+            main=<Question number={Tasks[currentTask-1][0]} title={Tasks[currentTask-1][1]} answer={answer} handleAnswer={this.handleAnswer} submitAnswer={this.submitAnswer}/>;
+            console.log(this.state.responses);
         }
 
         console.log("currentTask is "+currentTask.toString());
@@ -121,175 +208,6 @@ function Question(props){
     )
 }
 
-
-
-{/*<input type="text" value={props.userId} onChange={props.fillUser}></input>*/}
-
-//                     <FormControl
-//                         type="text"
-//                         value={props.value}
-//                         placeholder="Enter number"
-//                         onChange={props.handleChange}
-//                     />
-
-{/*<input type="submit" value="Submit"></input>*/}
-
-
-
-
-// class Question extends Component {
-//     render() {
-//         return (
-//             <div><h1>{this.state}</h1>
-//             <div>
-//                 This is a new conponent
-//             </div>
-//             </div>
-//         )
-//     }
-// }
-
-// let userId;
-//
-
-//
-// class Question extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.handleChange = this.handleChange.bind(this);
-//     }
-//
-//     handleSubmit(e) {
-//
-//     }
-//
-//     handleChange(e) {
-//         e.preventDefault();
-//         this.props.response(e.target.value);
-//     }
-//
-//     render(){
-//
-//         return(
-//             <Background>
-//                 <h1>{this.props.title}</h1>
-//                 <form onSubmit={this.handleSubmit}>
-//                     <label>Fill your response in the box below</label>
-//                     <input type="text" value={this.props.response} onChange={this.handleChange}></input>
-//                     <input type="submit" value="Submit"></input>
-//                 </form>
-//             </Background>
-//         )
-//
-//     }
-//
-//
-// }
-//
-// class App extends Component {
-//     constructor(props){
-//         super(props);
-//         this.state = {title:"Hello world",response:"Who are you"};
-//     }
-//
-//     render(){
-//         const title = this.state.title;
-//         return(
-//             <Background>
-//                 <Question title={title}>
-//
-//                 </Question>
-//             </Background>
-//         )
-//     }
-// }
-
-// function WelcomePage(props){
-//     return(
-//         <h1>Welcome to NOAH Study</h1>
-//         <form onSubmit=
-//     )
-// }
-
-
-//
-// function WelcomePage(props){
-//     return (
-//         <header className="App-header">
-//             <h1>Welcome to NOAH study</h1>
-//             <form onSubmit={props.handleSubmit}>
-//                 <FormGroup>
-//                     <ControlLabel>Please select your Participant number:</ControlLabel>
-//                     <FormControl
-//                         type="text"
-//                         value={props.value}
-//                         placeholder="Enter number"
-//                         onChange={props.handleChange}
-//                     />
-//                 </FormGroup>
-//                 <Button bsStyle="primary" type="submit" className="Start">Start</Button>
-//             </form>
-//         </header>
-//     );
-// }
-
-//
-// class App extends Component {
-//
-//     constructor(props){
-//         super(props);
-//         this.state = {
-//             value: '',
-//             quizzes: {},
-//             isLoggedIn: false
-//         };
-//         this.handleChange = this.handleChange.bind(this);
-//         this.handleSubmit = this.handleSubmit.bind(this);
-//     }
-//
-//     handleChange(e) {
-//         this.setState({value:e.target.value});
-//     }
-//
-//     handleSubmit(user) {
-//         // e.preventDefault();
-//         console.log("run submit function");
-//         // console.log(e.props.value);
-//         console.log(this);
-//         axios.get(`http://localhost:5000/getQuestions/${user}`)
-//             .then(res => {
-//                 // console.log(res);
-//                 console.log(res.data.task1.system);
-//                 const quizzes = res.data;
-//                 this.setState(state => ({
-//                     quizzes: quizzes
-//                 }))
-//                 console.log(this.state.quizzes);
-//             })
-//     }
-//
-//
-//     render() {
-//
-//         const isloggedIn = this.state.isLoggedIn;
-//         let content;
-//
-//         if (isloggedIn){
-//
-//         }else{
-//             content = <WelcomePage
-//                 handleSubmit={(this.value) => this.handleSubmit}
-//                 value={this.value}
-//             />
-//         }
-//
-//         return (
-//             <div className="App">
-//                 {content}
-//             </div>
-//         );
-//     }
-// }
 
 
 

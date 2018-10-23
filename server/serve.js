@@ -1,6 +1,8 @@
 var express = require('express');
-var reload = require('express-reload');
+// var reload = require('express-reload');
 var app = express();
+var bodyParser = require('body-parser');
+
 
 var path = __dirname + '/serve.js';
 
@@ -9,7 +11,9 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+app.use(bodyParser.urlencoded({extended:false}));
 
+app.use(bodyParser.json());
 // var Excel = require('exceljs')
 //
 // respond with "hello world" when a GET request is made to the homepage
@@ -169,6 +173,7 @@ function getQuestions(user){
     return(
         {
             'user': user,
+            'warmUp': data['flight'],
             'task1': {
                 'system': i_1,
                 'dataset': data[d_1]
@@ -181,19 +186,19 @@ function getQuestions(user){
     )
 }
 
-
+let userResponse = {}
 //post user submitted data to a new sheet.
 function postResponses(auth){
 
     const sheets = google.sheets({version: 'v4', auth});
 
-    let userResponse = {
-        user:currentUser,
-        responses:[['answer1', 'time1'],
-        ['answer2', 'time2'],
-        ['answer3', 'time3'],
-        ['answer4', 'time4']]
-    }
+    // let userResponse = {
+    //     user:currentUser,
+    //     responses:[['answer1', 'time1'],
+    //     ['answer2', 'time2'],
+    //     ['answer3', 'time3'],
+    //     ['answer4', 'time4']]
+    // }
 
     let sheetTitle = userResponse.user;
 
@@ -218,6 +223,7 @@ function postResponses(auth){
     let values = userResponse.responses;
 
 
+    console.log("Print title and responses"+sheetTitle+values);
     let resource = {
         values,
     };
@@ -303,14 +309,21 @@ app.get('/getQuestions/:userId', function (req, res) {
 })
 
 // post data demo
-app.get('/postData', function(req, res){
+app.post('/postData', function(req, res){
+
+    console.log("This is the start of postData");
+    userResponse['responses'] = req.body.responses;
+    userResponse['user'] = req.body.user;
+
+    console.log(userResponse);
+    // console.log(req)
     authorize(credentials, postResponses);
     res.send("end")
     // res.send(postResponses());
     // res.send(res);
 })
 
-app.use(reload(path));
+// app.use(reload(path));
 
 
 app.listen(5000, () => console.log("listening on 5000"));

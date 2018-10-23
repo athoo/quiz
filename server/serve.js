@@ -1,9 +1,8 @@
-var express = require('express')
-var reload = require('express-reload')
-var app = express()
+var express = require('express');
+var reload = require('express-reload');
+var app = express();
 
-var path = __dirname + '/serve.js'
-var Promise = require('promise')
+var path = __dirname + '/serve.js';
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -43,6 +42,7 @@ fs.readFile('credentials.json', (err, content) => {
     // Authorize a client with credentials, then call the Google Sheets API.
     credentials = JSON.parse(content)
     // authorize(credentials, readUserGroups);
+    authorize(credentials, readUserGroups);
 });
 
 /**
@@ -126,8 +126,6 @@ function readUserGroups(auth) {
                 users[`${row[0]}`] = [`${row[1]}`, `${row[2]}`, `${row[3]}`, `${row[4]}`];
             })
 
-
-
             data['flight'] = [];
             data['birdstrikes'] = [];
             data['airbnb'] = [];
@@ -150,11 +148,9 @@ function readUserGroups(auth) {
                 // console.log(row[1]);
             })
 
-            let re = getQuestions(currentUser);
-
-            return(re);
-
-
+            // let re = getQuestions(currentUser);
+            //
+            // return(re);
         }
     })
 }
@@ -188,33 +184,25 @@ function getQuestions(user){
 
 //post user submitted data to a new sheet.
 function postResponses(auth){
+
     const sheets = google.sheets({version: 'v4', auth});
 
-    let values = [
-        ["5", "NOAH", 'xsv', 'dsadsa', 'sdddd']
-    ];
-    // console.log([{'addSheet':{} }]);
-    const resource = {
-        values,
-    };
+    let userResponse = {
+        user:currentUser,
+        responses:[['answer1', 'time1'],
+        ['answer2', 'time2'],
+        ['answer3', 'time3'],
+        ['answer4', 'time4']]
+    }
+
+    let sheetTitle = userResponse.user;
 
     let requests = [];
 
     requests.push({
-        addSheet:{
-            properties: {
-                title:"New Sheet"
-            }
-        }
-    })
-
-    // const batchUpdateRequest = {requests};
-
-    const batchUpdateRequest ={
-        "requests": [{
         "addSheet": {
             "properties": {
-                "title": "Expenses",
+                "title": sheetTitle,
                 "sheetType": "GRID",
                 "gridProperties": {
                     "rowCount": 50,
@@ -222,45 +210,95 @@ function postResponses(auth){
                 }
             }
         }
-    }],
-    }
-    console.log("This is "+batchUpdateRequest);
+    });
+
+    let batchUpdateRequest = {requests};
+
+
+    let values = userResponse.responses;
+
+
+    let resource = {
+        values,
+    };
+
+    console.log("Start post response")
+
     sheets.spreadsheets.batchUpdate(
         {
-            spreadsheetId: spreadsheet,
-            // range:"Sheet1!7:7",
-            // valueInputOption:"USER_ENTERED",
-            resource: batchUpdateRequest,
-            // resource,
-            // fields: 'spreadsheetId'
-            // spreadsheetId: spreadsheet,
-            // resource: {demoPost}
+            spreadsheetId:spreadsheet,
+            resource:batchUpdateRequest
         }, (err, response) => {
             if(err) {
-                console.log(err)
+                console.log(err);
                 return(err);
             } else {
-                console.log(response.data.values);
-                const numRows = response.data.values ? response.data.values.length:0;
-                console.log(numRows+" rows retrieved.");
-                // console.log(response);
-                // return(response);
+                sheets.spreadsheets.values.append({
+                    spreadsheetId:spreadsheet,
+                    range: sheetTitle,
+                    valueInputOption:"USER_ENTERED",
+                    resource: resource
+                }, (err, response) => {
+                    if(err){
+                        return(err);
+                    } else{
+                        return('success');
+                    }
+                })
             }
         }
     )
-    console.log("end post")
+
+    // requests.push({
+    //     addSheet:{
+    //         properties: {
+    //             title:"New Sheet"
+    //         }
+    //     }
+    // })
+
+    // const batchUpdateRequest = {requests};
+
+    // const batchUpdateRequest ={
+    //     "requests": [],
+    // }
+    // console.log("This is "+batchUpdateRequest);
+    // sheets.spreadsheets.batchUpdate(
+    //     {
+    //         spreadsheetId: spreadsheet,
+    //         // range:"Sheet1!7:7",
+    //         // valueInputOption:"USER_ENTERED",
+    //         resource: batchUpdateRequest,
+    //         // resource,
+    //         // fields: 'spreadsheetId'
+    //         // spreadsheetId: spreadsheet,
+    //         // resource: {demoPost}
+    //     }, (err, response) => {
+    //         if(err) {
+    //             console.log(err)
+    //             return(err);
+    //         } else {
+    //             console.log(response.data.values);
+    //             const numRows = response.data.values ? response.data.values.length:0;
+    //             console.log(numRows+" rows retrieved.");
+    //             // console.log(response);
+    //             // return(response);
+    //         }
+    //     }
+    // )
+    // console.log("end post")
 }
 
 // get data based on user id
 app.get('/getQuestions/:userId', function (req, res) {
 
     currentUser = req.params.userId;
-    let r = authorize(credentials, readUserGroups);
-    res.send(r);
+    // let r = authorize(credentials, readUserGroups);
 
-
-
-
+    let re = getQuestions(currentUser);
+    //
+    // return(re);
+    res.send(re);
 
 })
 

@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import {FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import axios from 'axios';
-const demo = {
-    user:"1",
-    system:"NOAH",
-    Tasks:["This is the first question: find the most expensive listing in New York.", "This is the second question", "This is the third one."]
-}
 
 const serverIP = "http://localhost:5000"
+// const serverIP = "http://kite.cs.illinois.edu:5000"
 class App extends Component {
 
     constructor(props) {

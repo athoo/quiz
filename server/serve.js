@@ -167,8 +167,7 @@ function getQuestions(user){
     let d_1 = conditions[1];
     let i_2 = conditions[2];
     let d_2 = conditions[3];
-    // console.log(users);
-    // console.log(conditions);
+
     // console.log(data)
     return(
         {
@@ -176,10 +175,12 @@ function getQuestions(user){
             'warmUp': data['flight'],
             'task1': {
                 'system': i_1,
+                'name': d_1,
                 'dataset': data[d_1]
             },
             'task2': {
                 'system': i_2,
+                'name': d_2,
                 'dataset': data[d_2]
             }
         }
@@ -255,44 +256,6 @@ function postResponses(auth){
         }
     )
 
-    // requests.push({
-    //     addSheet:{
-    //         properties: {
-    //             title:"New Sheet"
-    //         }
-    //     }
-    // })
-
-    // const batchUpdateRequest = {requests};
-
-    // const batchUpdateRequest ={
-    //     "requests": [],
-    // }
-    // console.log("This is "+batchUpdateRequest);
-    // sheets.spreadsheets.batchUpdate(
-    //     {
-    //         spreadsheetId: spreadsheet,
-    //         // range:"Sheet1!7:7",
-    //         // valueInputOption:"USER_ENTERED",
-    //         resource: batchUpdateRequest,
-    //         // resource,
-    //         // fields: 'spreadsheetId'
-    //         // spreadsheetId: spreadsheet,
-    //         // resource: {demoPost}
-    //     }, (err, response) => {
-    //         if(err) {
-    //             console.log(err)
-    //             return(err);
-    //         } else {
-    //             console.log(response.data.values);
-    //             const numRows = response.data.values ? response.data.values.length:0;
-    //             console.log(numRows+" rows retrieved.");
-    //             // console.log(response);
-    //             // return(response);
-    //         }
-    //     }
-    // )
-    // console.log("end post")
 }
 
 // get data based on user id

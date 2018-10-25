@@ -74,7 +74,7 @@ class App extends Component {
 
 
                 resData.warmUp.map((q)=>{
-                    currentTaskSet.push(["Warm Up Session", q])
+                    currentTaskSet.push(["Warm up Session", q])
                 })
                 tasks.push(currentTaskSet);
 
@@ -183,7 +183,6 @@ class App extends Component {
 
         if(states[idx]==0){
             this.setState({welcome:true, prompt:true, index:idx+1});
-            // index: index+1,
         } else {
             this.setState({prompt:true});
         }
@@ -217,29 +216,52 @@ class App extends Component {
 
 
         if(welcome==true && prompt==false && states[0]!=0){
-            console.log("welfomccc");
-            main = <Welcome userId={userId} fillUser={this.fillUser} handleUser={this.handleUser}/>;
+            main = <Welcome
+                userId={userId}
+                fillUser={this.fillUser}
+                handleUser={this.handleUser}
+            />;
         }
         else if(welcome==true && prompt==true && index==0){
-            main = <WaitForNext showQuestion={this.showQuestion} prompt='Open the "flight" dataset in NOAH. Click Start to begin the warm up session.'/>;
+            main = <WaitForNext
+                showQuestion={this.showQuestion}
+                prompt="Warm up Stage"
+                intro='Open the "flight" dataset in NOAH. Click Start to begin the warm up session.'
+                continue="Start"
+            />;
         }
         else if(welcome==true && prompt==true && index==1) {
-            main = <WaitForNext showQuestion={this.showQuestion} prompt={`The warm up session is complete. We will now move on to the next phase of the study. Opne the ${this.state.dataset1} dataset in ${this.state.system1}. And click "Continue" to begin`}/>;
-
+            main = <WaitForNext
+                showQuestion={this.showQuestion}
+                // prompt="First Stage"
+                intro={`The warm up session is complete. We will now move on to the next phase of the study. `}
+                intro2={`Opne the ${this.state.dataset1} dataset in ${this.state.system1}. And click "Continue" to begin`}
+                continue="Continue"
+            />;
         }
         else if(welcome==true && prompt==true && index==2) {
-            main = <WaitForNext showQuestion={this.showQuestion} prompt=
-
-                {`We are done with the first system. Please complete the survey: {provide the survey link}. After you are done, please open the X = {birdstrikes, airbnb} dataset in Y={NOAH, EXCEL}. And click "Continue" to move on to the next part of the study.`}
-                                
-
+            main = <WaitForNext
+                showQuestion={this.showQuestion}
+                // prompt="Second Stage"
+                intro={`We are done with the first system. Please complete the survey: `}
+                survey={this.state.system1=="NOAH"?"https://docs.google.com/forms/d/e/1FAIpQLSfiTSc7bK6jey2fKuK661fRyNMhP6gusU8dVae9Je-qHcrScA/viewform":"https://docs.google.com/forms/d/e/1FAIpQLSc03p8GevfCrsXLwnHcs-CBfsPr5if-ssLcDv1TinEkRL-SFQ/viewform"}
+                intro2={`After you are done, please open the X = ${this.state.dataset2} dataset in ${this.state.system2}. And click "Continue" to move on to the next part of the study.`}
+                continue="Continue"
             />;
         }
 
 
         else if(welcome==true && prompt==true && index==3) {
-            main = <WaitForNext prompt="End"/>;
+            // main = <WaitForNext prompt="End"/>;
 
+            main = <WaitForNext
+                showQuestion={this.showQuestion}
+                prompt="Second Stage"
+                intro={`We are done with the second system. Please complete the survey: `}
+                survey={this.state.system2=="NOAH"?"https://docs.google.com/forms/d/e/1FAIpQLSfiTSc7bK6jey2fKuK661fRyNMhP6gusU8dVae9Je-qHcrScA/viewform":"https://docs.google.com/forms/d/e/1FAIpQLSc03p8GevfCrsXLwnHcs-CBfsPr5if-ssLcDv1TinEkRL-SFQ/viewform"}
+                intro2={`After you are done, please click "Submit" to complete the study.`}
+                continue="Submit"
+            />;
 
                 const responses = this.state.responses;
 
@@ -259,22 +281,16 @@ class App extends Component {
                     console.log(error);
                 });
             }
-        // else if(welcome==true && prompt==true && states[1]!=0){
-        //     main = <WaitForNext showQuestion={this.showQuestion}/>;
-        //     console.log("Prompt is true");
-        //     //prompt second taskset
-        //     // prompt=false;
-        // } else if(welcome==true && prompt==true && states[2]!=0){
-        //     main = <WaitForNext showQuestion={this.showQuestion}/>;
-        //     console.log("Prompt is true");
-        //     //prompt third taskset
-        //     // end and submit
-        // }
         else if(welcome==false && prompt==true ){
-            main = <WaitForNext showQuestion={this.showQuestion} prompt="next is a question"/>;
+            main = <WaitForNext showQuestion={this.showQuestion} intro="Click Continue to start next question" continue="Continue"/>;
             console.log("Prompt is true");
             //prompt give prompt taskset
             // prompt=false;
+        } else if(welcome==false && prompt==false && index==3){
+          main=<WaitForNext
+              intro="Thank you for your participation."
+              continue="End"
+          />
         } else if(welcome==false && prompt==false){
             main=<Question
                 number={Tasks[index][originalStates[index]-states[index]][0]}
@@ -284,7 +300,6 @@ class App extends Component {
                 submitAnswer={this.submitAnswer}
             />;
         }
-
 
         return(
             <div>
@@ -344,7 +359,10 @@ function WaitForNext(props){
     return(
         <div>
             <h1>{props.prompt}</h1>
-            <Button bsStyle="primary" onClick={props.showQuestion}>Start</Button>
+            <p>{props.intro}</p>
+            {props.survey && <a href={props.survey} target="_blank">Survey Link</a>}
+            <p>{props.intro2}</p>
+            <Button bsStyle="primary" onClick={props.showQuestion} className="App-link">{props.continue}</Button>
         </div>
 
     )

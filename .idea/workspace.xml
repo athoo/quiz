@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6e2d7bc6-32cd-4cd2-893a-e264287d7de2" name="Default" comment="system with basic post function finished">
+    <list default="true" id="6e2d7bc6-32cd-4cd2-893a-e264287d7de2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change beforePath="$PROJECT_DIR$/server/serve.js" afterPath="$PROJECT_DIR$/server/serve.js" />
       <change beforePath="$PROJECT_DIR$/src/App.js" afterPath="$PROJECT_DIR$/src/App.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -70,8 +68,8 @@
           <file leaf-file-name="App.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/App.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="264">
-                  <caret line="216" column="0" lean-forward="false" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
+                <state relative-caret-position="368">
+                  <caret line="233" column="32" lean-forward="false" selection-start-line="233" selection-start-column="32" selection-end-line="233" selection-end-column="32" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -96,8 +94,8 @@
           <file leaf-file-name="App.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/App.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-123">
-                  <caret line="296" column="81" lean-forward="false" selection-start-line="296" selection-start-column="81" selection-end-line="296" selection-end-column="81" />
+                <state relative-caret-position="284">
+                  <caret line="71" column="34" lean-forward="true" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -140,6 +138,7 @@
       <find>startTime</find>
       <find>currentTask</find>
       <find>originalStates</find>
+      <find>system1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -274,7 +273,7 @@
       <workItem from="1539899969995" duration="5766000" />
       <workItem from="1540174777509" duration="2691000" />
       <workItem from="1540184298620" duration="26961000" />
-      <workItem from="1540309676101" duration="13429000" />
+      <workItem from="1540309676101" duration="14224000" />
     </task>
     <task id="LOCAL-00001" summary="frontend prototyped">
       <created>1540194370113</created>
@@ -304,11 +303,18 @@
       <option name="project" value="LOCAL" />
       <updated>1540281411682</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add welcome and prompt page">
+      <created>1540432889982</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1540432889983</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58655000" />
+    <option name="totallyTimeSpent" value="59450000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="23" width="1918" height="1055" extended-state="6" />
@@ -347,7 +353,8 @@
     <MESSAGE value="basic system" />
     <MESSAGE value="system with basic post function finished" />
     <MESSAGE value="first workable system" />
-    <option name="LAST_COMMIT_MESSAGE" value="first workable system" />
+    <MESSAGE value="add welcome and prompt page" />
+    <option name="LAST_COMMIT_MESSAGE" value="add welcome and prompt page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -454,8 +461,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="216" column="0" lean-forward="false" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
+        <state relative-caret-position="368">
+          <caret line="233" column="32" lean-forward="false" selection-start-line="233" selection-start-column="32" selection-end-line="233" selection-end-column="32" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>

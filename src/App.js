@@ -34,7 +34,9 @@ class App extends Component {
            prompt: false,
            index: 0,
            originalStates:[],
-           startTime:0
+           startTime:0,
+           dataset1:"",
+           dataset2:""
        }
        this.fillUser = this.fillUser.bind(this);
        this.handleUser = this.handleUser.bind(this);
@@ -64,6 +66,12 @@ class App extends Component {
                 let currentTaskSet = [];
 
                 console.log(resData.warmUp);
+
+                this.state.dataset1 = resData["task1"]["name"];
+                this.state.dataset2 = resData["task2"]["name"];
+                this.state.system1 = resData["task1"]["system"];
+                this.state.system2 = resData["task2"]["system"];
+
 
                 resData.warmUp.map((q)=>{
                     currentTaskSet.push(["Warm Up Session", q])
@@ -216,12 +224,19 @@ class App extends Component {
             main = <WaitForNext showQuestion={this.showQuestion} prompt='Open the "flight" dataset in NOAH. Click Start to begin the warm up session.'/>;
         }
         else if(welcome==true && prompt==true && index==1) {
-            main = <WaitForNext showQuestion={this.showQuestion} prompt="The warm up session is complete. We will now move on to the next phase of the study. Click ok to begin"/>;
+            main = <WaitForNext showQuestion={this.showQuestion} prompt={`The warm up session is complete. We will now move on to the next phase of the study. Opne the ${this.state.dataset1} dataset in ${this.state.system1}. And click "Continue" to begin`}/>;
 
         }
         else if(welcome==true && prompt==true && index==2) {
-            main = <WaitForNext showQuestion={this.showQuestion} prompt="Next is the second trial"/>;
+            main = <WaitForNext showQuestion={this.showQuestion} prompt=
+
+                {`We are done with the first system. Please complete the survey: {provide the survey link}. After you are done, please open the X = {birdstrikes, airbnb} dataset in Y={NOAH, EXCEL}. And click "Continue" to move on to the next part of the study.`}
+                                
+
+            />;
         }
+
+
         else if(welcome==true && prompt==true && index==3) {
             main = <WaitForNext prompt="End"/>;
 

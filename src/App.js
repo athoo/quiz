@@ -231,7 +231,7 @@ class App extends Component {
                 showQuestion={this.showQuestion}
                 // prompt="First Stage"
                 intro={`The warm up session is complete. We will now move on to the next phase of the study. `}
-                intro2={`Opne the ${this.state.dataset1} dataset in ${this.state.system1}. And click "Continue" to begin`}
+                intro2={`Open the ${this.state.dataset1} dataset in ${this.state.system1}. And click "Continue" to begin`}
                 continue="Continue"
             />;
         }
@@ -241,12 +241,10 @@ class App extends Component {
                 // prompt="Second Stage"
                 intro={`We are done with the first system. Please complete the survey: `}
                 survey={this.state.system1=="NOAH"?"https://docs.google.com/forms/d/e/1FAIpQLSfiTSc7bK6jey2fKuK661fRyNMhP6gusU8dVae9Je-qHcrScA/viewform":"https://docs.google.com/forms/d/e/1FAIpQLSc03p8GevfCrsXLwnHcs-CBfsPr5if-ssLcDv1TinEkRL-SFQ/viewform"}
-                intro2={`After you are done, please open the X = ${this.state.dataset2} dataset in ${this.state.system2}. And click "Continue" to move on to the next part of the study.`}
+                intro2={`After you are done, please open the ${this.state.dataset2} dataset in ${this.state.system2}. And click "Continue" to move on to the next part of the study.`}
                 continue="Continue"
             />;
         }
-
-
         else if(welcome==true && prompt==true && index==3) {
             // main = <WaitForNext prompt="End"/>;
 

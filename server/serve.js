@@ -112,8 +112,10 @@ function readUserGroups(auth) {
     let ranges = [
         'participants!A2:E',
         'flight',
-        'birdstrikes',
-        'airbnb'
+        'NOAH-birdstrikes',
+        'EXCEL-birdstrikes',
+        'NOAH-airbnb',
+        'EXCEL-airbnb'
     ]
 
     sheets.spreadsheets.values.batchGet({
@@ -131,8 +133,10 @@ function readUserGroups(auth) {
             })
 
             data['flight'] = [];
-            data['birdstrikes'] = [];
-            data['airbnb'] = [];
+            data['EXCEL-birdstrikes'] = [];
+            data['EXCEL-airbnb'] = [];
+            data['NOAH-birdstrikes'] = [];
+            data['NOAH-airbnb'] = [];
 
             rows = studyData[1].values.slice(1,);
 
@@ -143,15 +147,26 @@ function readUserGroups(auth) {
             rows = studyData[2].values.slice(1,);
 
             rows.map((row) => {
-                data['birdstrikes'][row[0]-1] = row[1];
+                data['NOAH-birdstrikes'][row[0]-1] = row[1];
             })
 
             rows = studyData[3].values.slice(1,);
             rows.map((row) => {
-                data['airbnb'][row[0]-1] = row[1];
+                data['EXCEL-birdstrikes'][row[0]-1] = row[1];
                 // console.log(row[1]);
             })
 
+            rows = studyData[4].values.slice(1,);
+            rows.map((row) => {
+                data['NOAH-airbnb'][row[0]-1] = row[1];
+                // console.log(row[1]);
+            })
+
+            rows = studyData[5].values.slice(1,);
+            rows.map((row) => {
+                data['EXCEL-airbnb'][row[0]-1] = row[1];
+                // console.log(row[1]);
+            })
             // let re = getQuestions(currentUser);
             //
             // return(re);
@@ -176,12 +191,12 @@ function getQuestions(user){
             'task1': {
                 'system': i_1,
                 'name': d_1,
-                'dataset': data[d_1]
+                'dataset': data[i_1+'-'+d_1]
             },
             'task2': {
                 'system': i_2,
                 'name': d_2,
-                'dataset': data[d_2]
+                'dataset': data[i_2+'-'+d_2]
             }
         }
     )
